@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Galería de Canciones</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+        
+        body {
+            background-color: #7FD488;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        header {
+            text-align: center;
+            padding: 80px 0;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            letter-spacing: 3px;
+        }
+        
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .gallery {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-gap: 20px;
+        }
+        
+        .song-card {
+            position: relative;
+            overflow: hidden;
+            height: 200px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .song-card:hover {
+            transform: scale(1.03);
+        }
+        
+        .song-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: filter 0.3s ease;
+        }
+        
+        .song-card:hover img {
+            filter: brightness(70%);
+        }
+        
+        .song-title {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+        
+        .song-card:hover .song-title {
+            transform: translateY(0);
+        }
+        
+        .lyrics-container {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .lyrics-container.active {
+            display: block;
+        }
+        
+        .lyrics {
+            white-space: pre-line;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .youtube-link {
+            display: inline-block;
+            background-color: #FF0000;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        
+        .youtube-link:hover {
+            background-color: #CC0000;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: auto;
+            font-size: 0.9rem;
+        }
+        
+        .credits {
+            display: flex;
+            justify-content: space-between;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .credits {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        #fh5co-footer {
+            padding: 50px 0;
+            float: left;
+            width: 100%;
+            }
+        #fh5co-footer p:last-child {
+            margin-bottom: 0;
+            }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Un poco de mi</h1>
+        <p> COVERS de español a ingles</p>
+    </header>
+    
+    <div class="container">
+        <div class="gallery">
+            <!-- Canción 1 -->
+            <div class="song-card" data-song="cancion1">
+                <img src="../images/musica.png" alt="Canción 1">
+                <div class="song-title">Eyes</div>
+            </div>
+            
+            <!-- Canción 2 -->
+            <div class="song-card" data-song="cancion2">
+                <img src="../images/mienteme.png" alt="Canción 2">
+                <div class="song-title">LIE TO ME 
+                    (En proceso)
+                </div>
+            </div>
+            
+            <!-- Canción 3
+            <div class="song-card" data-song="cancion3">
+                <img src="/api/placeholder/400/320" alt="Canción 3">
+                <div class="song-title">Obsesión</div>
+            </div>
+            
+            <!-- Canción 4 
+            <div class="song-card" data-song="cancion4">
+                <img src="/api/placeholder/400/320" alt="Canción 4">
+                <div class="song-title">Atardecer</div>
+            </div>
+        </div> -- Fin de la galería -->
+
+        
+        <div class="lyrics-container" id="lyrics-display">
+            <h2 id="song-title-display"></h2>
+            <div class="lyrics" id="lyrics-text"></div>
+            <a href="#" class="youtube-link" id="youtube-link" target="_blank">Ver en YouTube</a>
+        </div>
+    </div>
+    
+    <div id="fh5co-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <p>&copy; 2024 All Rights Reserved. <br>
+                    Designed by <a href="#" target="_blank" style="text-decoration: none; color: inherit;">Azalia</a> | 
+                    Imágenes: <span style="font-weight: bold;">Ruiz.iram</span> | 
+                    <a href="#" target="_blank" style="text-decoration: none; color: inherit;">Unit</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <script>
+        const songDatabase = {
+            cancion1: {
+    title: "EYES - Montufar",
+    lyrics: `The Are Things That I Like About You
+Like The Essence of Your World
+And The Little Confusion
+That Stop Me and Tocks Me 
+I don’t know why you’re leaving
+I Know, I’m Just Your Friend
+I Like, having You Here
+By, My Side For a Moment
+
+Sometimes, I, Feel, Like It erasing You From My Mind
+Something, I Don’t, Know, How to
+How To Look You In Your Eyes
+When They Make Me Feel So Much
+Something that you love to do
+
+There Are Things That I Don’t Know About You 
+That I Need To Discover
+Tear Out My Heart
+With The Most, Eternal Secret
+I Would Like to Know You More
+But You Always Walk Away
+I’ve Gotten Used To It
+To The Way You Are
+
+We Ignore Each Other and Talk From Monday to Sunday
+Tell Me Where You Go, To Go, With You
+And Then You Go`,
+    youtubeLink: "https://www.youtube.com/watch?v=ejemplo1"
+},
+
+            cancion2: {
+                title: "LIE TO ME - Glass",
+                lyrics: ``,
+                youtubeLink: "https://www.youtube.com/watch?v=ejemplo2"
+            },
+        };
+
+        // Seleccionar elementos
+        const songCards = document.querySelectorAll('.song-card');
+        const lyricsContainer = document.getElementById('lyrics-display');
+        const songTitleDisplay = document.getElementById('song-title-display');
+        const lyricsText = document.getElementById('lyrics-text');
+        const youtubeLink = document.getElementById('youtube-link');
+
+        // Añadir eventos a las tarjetas de canciones
+        songCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const songId = card.getAttribute('data-song');
+                const song = songDatabase[songId];
+                
+                // Actualizar contenido
+                songTitleDisplay.textContent = song.title;
+                lyricsText.textContent = song.lyrics;
+                youtubeLink.href = song.youtubeLink;
+                
+                // Mostrar el contenedor de letras
+                lyricsContainer.classList.add('active');
+                
+                // Scroll suave en dispositivos móviles
+                if (window.innerWidth <= 768) {
+                    lyricsContainer.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
